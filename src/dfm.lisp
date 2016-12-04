@@ -1,4 +1,4 @@
-;;;; dfm.lisp
+;;;; dfm.lisp - main file for dfm
 
 (in-package #:dfm)
 
