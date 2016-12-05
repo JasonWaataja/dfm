@@ -24,5 +24,9 @@
 	   #:delete-file-generic
 	   #:append-file-to-directory
 	   #:copy-directory
-	   #:last-directory-component))
+	   #:copy-directory-into
+	   #:last-directory-component
+	   #:copy-file-generic
+	   #:delete-file-generic
+	   #:copy-file-into-generic))
 

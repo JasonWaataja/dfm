@@ -57,3 +57,19 @@ directory."
     (if as-directory
 	(delete-directory-tree as-directory :validate t)
 	(delete-file pathspec))))
+
+(defun copy-file-generic (source-pathspec dest-pathspec)
+  "Copy pathspec whether it's a regular file or directory. Behavior changes
+based on if the file is in file form or directory form."
+  (if (directory-pathname-p source-pathspec)
+      (copy-directory source-pathspec dest-pathspec)
+      (copy-file source-pathspec dest-pathspec)))
+
+(defun copy-file-into-generic (source-pathspec dest-pathspec)
+  "Copy pathspec into the given directory. Works on files and directories.
+Behavior changes based on if the source-pathspec is in file form or directory
+form."
+  (if (directory-pathname-p source-pathspec)
+      (copy-directory-into source-pathspec dest-pathspec)
+      (copy-file source-pathspec (append-file-to-directory source-pathspec
+							   dest-pathspec))))

@@ -12,12 +12,6 @@
 
 (defgeneric module-component-uninstall (component))
 
-;; (defun module-install (module)
-;;   (cond ((eql (component-type module) :install) (module-component-install module))
-;; 	((eql (component-type module) :uninstall) (module-component-uninstall module))
-;; 	;; TODO: Add error condition.
-;; 	(t (format t "Error, unrecognized module type.~%"))))
-
 (defclass module-file (module-component)
   ((filename
     :initarg :filename
@@ -35,20 +29,33 @@
     :initarg :remove-on-uninstall
     :initform nil
     :accessor remove-on-uninstall)))
+
+;; (defmethod initialize-instance :after ((module module-file) &key)
+;; 	   (
+
+(defun module-file-source-path (module)
+  (append-file-to-directory (filename module)
+			    (start-directory module)))
+
+(defun module-file-destination-path (module)
+  (append-file-to-directory (filename module)
+			    (install-directory module)))
  
 (defmethod module-component-install ((module module-file))
-  (if (directory-pathname-p 
+  (copy-file-into-generic (module-file-source-path module)
+			  (install-directory module)))
   
 
 (defmethod module-component-uninstall ((module module-file))
-  (let ((file-path (uiop:merge-pathnames* (filename module)
-					  (uiop:ensure-directory-pathname
-					   (start-directory module)))))
-    (if (uiop:file-exists-p 
-
+  (when (remove-on-uninstall module)
+    (delete-file-generic (module-file-destination-path module))))
 
 (defclass module ()
-  ((module-components
+  ((module-name
+    :initarg :module-name
+    :initform "Generic Module"
+    :accessor module-name)
+   (module-components
     :initarg :module-components
     :initform nil
     :accessor module-components)))

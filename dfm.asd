@@ -4,7 +4,7 @@
   :description "The Common Lisp version of Dot File Manager"
   :author "Jason Waataja <jasonswaataja@gmail.com>"
   :license "MIT"
-  :depends-on (#:cl-charms #:uiop #:getopt)
+  :depends-on (#:uiop #:getopt)
   :components ((:module "src"
 			:serial t
 			:components ((:file "package")
