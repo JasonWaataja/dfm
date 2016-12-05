@@ -9,4 +9,4 @@
 			:serial t
 			:components ((:file "package")
 				     (:file "dfm")
-				     (:file "module"))))
+				     (:file "module")))))

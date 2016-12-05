@@ -2,5 +2,27 @@
 
 (defpackage #:dfm
   (:use #:cl)
-  (:export #:main #:config-file-for-path #:config-file-from-options))
+  (:import-from #:uiop
+		#:merge-pathnames*
+		#:subpathname
+		#:getcwd
+		#:directory*
+		#:directory-exists-p
+		#:directory-pathname-p
+		#:file-pathname-p
+		#:ensure-directory-pathname
+		#:directory-files
+		#:subdirectories
+		#:copy-file
+		#:file-exists-p
+		#:probe-file*
+		#:delete-directory-tree)
+  (:export #:main
+	   #:config-file-for-path
+	   #:config-file-from-options
+	   #:copy-directory-into
+	   #:delete-file-generic
+	   #:append-file-to-directory
+	   #:copy-directory
+	   #:last-directory-component))
 

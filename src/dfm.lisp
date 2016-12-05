@@ -5,7 +5,7 @@
 (defclass dfm-options ()
   ((start-directory
     :initarg :start-directory
-    :initform (make-pathname :defaults (uiop:getcwd))
+    :initform (make-pathname :defaults (getcwd))
     :accessor start-directory)
   (config-file
    :initarg :config-file
@@ -53,12 +53,12 @@ one level of the directory if it's a directory. Otherwise, returns nil."
   (let ((as-pathname (pathname path)))
     (if (string= (pathname-type path) "dfm")
 	(namestring as-pathname)
-	(let ((as-directory (uiop:directory-exists-p as-pathname)))
+	(let ((as-directory (directory-exists-p as-pathname)))
 	  (if as-directory
 	      (let ((with-wild (make-pathname :defaults as-directory
 					      :name :wild
 					      :type :wild)))
-		(loop for dirent in (uiop:directory* with-wild)
+		(loop for dirent in (directory* with-wild)
 		   if (string= (pathname-type dirent) *config-extension*)
 		   return (namestring dirent)
 		   finally (return nil))))))))
