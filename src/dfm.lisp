@@ -11,17 +11,24 @@
     :initarg :config-file-name
     :initform nil
     :accessor options-config-file-name)
-   (install-module
-    :initarg :install-module
+   (install-modules
+    :initarg :install-modules
     :initform nil
-    :accessor options-install-module)
-   (uninstall-module
-    :initarg :uninstall-module
+    :accessor options-install-modules)
+   (uninstall-modules
+    :initarg :uninstall-modules
     :initform nil
-    :accessor options-uninstall-module)))
+    :accessor options-uninstall-modules)
+   (all-modules
+    :initarg :all
+    :initform nil
+    :accessor options-all-modules)))
 
-(defparameter *getopt-args* '(("install" :required)
-			      ("uninstall" :required)))
+(defparameter *getopt-args* '(("install" :none)
+			      ("uninstall" :none)
+			      ("config" :required)
+			      ("directory" :required)
+			      ("all" :none)))
 
 (defparameter *config-extension* "dfm")
 
