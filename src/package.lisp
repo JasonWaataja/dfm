@@ -16,7 +16,9 @@
 		#:copy-file
 		#:file-exists-p
 		#:probe-file*
-		#:delete-directory-tree)
+		#:delete-directory-tree
+		#:absolute-pathname-p
+		#:file-pathname-p)
   (:export #:main
 	   #:config-file-for-path
 	   #:config-file-from-options
@@ -28,5 +30,6 @@
 	   #:last-directory-component
 	   #:copy-file-generic
 	   #:delete-file-generic
-	   #:copy-file-into-generic))
+	   #:copy-file-into-generic
+	   #:parent-directory-for-file))
 

@@ -3,26 +3,24 @@
 (in-package #:dfm)
 
 (defclass dfm-options ()
-  ((start-directory
-    :initarg :start-directory
+  ((source-directory
+    :initarg :source-directory
     :initform (make-pathname :defaults (getcwd))
-    :accessor start-directory)
-  (config-file
-   :initarg :config-file
-   :initform nil
-   :accessor config-file)
-   (install-modules
-    :initarg :install-modules
+    :accessor options-source-directory)
+   (config-file-name
+    :initarg :config-file-name
     :initform nil
-    :accessor install-modules)
-   (uninstall-modules
-    :initarg :uninstall-modules
+    :accessor options-config-file-name)
+   (install-module
+    :initarg :install-module
     :initform nil
-    :accessor uninstall-modules)))
+    :accessor options-install-module)
+   (uninstall-module
+    :initarg :uninstall-module
+    :initform nil
+    :accessor options-uninstall-module)))
 
-(defparameter *getopt-args* '(("directory" :required)
-			      ("config-file" :required)
-			      ("install" :required)
+(defparameter *getopt-args* '(("install" :required)
 			      ("uninstall" :required)))
 
 (defparameter *config-extension* "dfm")
@@ -47,21 +45,34 @@ list of the remaining arguments"
 		   (setf (slot-value options 'uninstall-modules) (cdr uninstall-cons)))
 		 (values options filtered-argument-list)))))))
 
-(defun config-file-for-path (path)
-  "Takes a string or pathname and either returns either the file if it's a config file or searches
-one level of the directory if it's a directory. Otherwise, returns nil."
-  (let ((as-pathname (pathname path)))
-    (if (string= (pathname-type path) "dfm")
-	(namestring as-pathname)
-	(let ((as-directory (directory-exists-p as-pathname)))
-	  (if as-directory
-	      (let ((with-wild (make-pathname :defaults as-directory
-					      :name :wild
-					      :type :wild)))
-		(loop for dirent in (directory* with-wild)
-		   if (string= (pathname-type dirent) *config-extension*)
-		   return (namestring dirent)
-		   finally (return nil))))))))
+(defun parent-directory-for-file (file-pathspec)
+  (let* ((pathname (make-pathname :defaults file-pathspec))
+	 (as-absolute (if (absolute-pathname-p pathname)
+			  pathname
+			  (merge-pathnames* pathname (getcwd)))))
+    (if (file-pathname-p as-absolute)
+	(make-pathname :defaults as-absolute
+		       :name nil
+		       :type nil)
+	nil)))
+
+;; (defun config-file-for-path (path)
+;;   "Takes a string or pathname and either returns either the file if it's a config file or searches
+;; one level of the directory if it's a directory. Otherwise, returns nil."
+;;   (let ((as-pathname (pathname path)))
+;;     (if (string= (pathname-type path) "dfm")
+;; 	(namestring as-pathname)
+;; 	(let ((as-directory (directory-exists-p as-pathname)))
+;; 	  (if as-directory
+;; 	      (let ((with-wild (make-pathname :defaults as-directory
+;; 					      :name :wild
+;; 					      :type :wild)))
+;; 		(loop for dirent in (directory* with-wild)
+;; 		   if (string= (pathname-type dirent) *config-extension*)
+;; 		   return (values as-directory (namestring dirent))
+;; 		   finally (return (values as-directory nil)))))
+;; 	  (if (file-exists-p as-pathname)
+;; 	      (
 
 (defun config-file-from-options (remaining-args)
     "Parses a list of arguments, probably from parse-argv, and scans the files to get the config
